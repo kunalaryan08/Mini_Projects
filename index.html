@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            padding: 20px;
+            transition: background-color 0.5s ease;
+        }
+        
+        /* Theme toggle styles */
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
+        
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .toggle-label .icon {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: #4a90e2;
+            border-radius: 50px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: white;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        #theme-toggle {
+            display: none;
+        }
+        
+        #theme-toggle:checked ~ .theme-toggle .toggle-switch {
+            background-color: #ff9f43;
+        }
+        
+        #theme-toggle:checked ~ .theme-toggle .toggle-switch::before {
+            transform: translateX(30px);
+        }
+        
+        /* Dark theme styles */
+        #theme-toggle:checked ~ body {
+            background-color: #1a1d28;
+        }
+        
+        #theme-toggle:checked ~ body .calculator {
+            background-color: #2d3343;
+            border-color: #3a4052;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        #theme-toggle:checked ~ body .display {
+            background-color: #252a36;
+            border-color: #3a4052;
+        }
+        
+        #theme-toggle:checked ~ body .display-input {
+            color: #f0f0f0;
+        }
+        
+        #theme-toggle:checked ~ body .key {
+            background-color: #3a4052;
+            color: #f0f0f0;
+        }
+        
+        #theme-toggle:checked ~ body .key:hover {
+            background-color: #454c5f;
+        }
+        
+        #theme-toggle:checked ~ body .key:active {
+            background-color: #50586e;
+        }
+        
+        #theme-toggle:checked ~ body .toggle-label {
+            color: #aaa;
+        }
+        
+        /* Calculator styles */
+        .calculator {
+            width: 340px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #eaeef3;
+            transition: all 0.5s ease;
+        }
+        
+        .display {
+            padding: 30px 25px;
+            background-color: #fafbfd;
+            text-align: right;
+            border-bottom: 1px solid #eaeef3;
+            transition: all 0.5s ease;
+        }
+        
+        .display-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: right;
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: #333;
+            outline: none;
+            letter-spacing: 1px;
+            transition: color 0.5s ease;
+        }
+        
+        .display-input::placeholder {
+            color: #aaa;
+        }
+        
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background-color: #eaeef3;
+        }
+        
+        .key {
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #333;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s ease;
+            border: none;
+            outline: none;
+        }
+        
+        .key:hover {
+            background-color: #f7f9fc;
+        }
+        
+        .key:active {
+            transform: scale(0.97);
+        }
+        
+        /* Colorful operator buttons */
+        .key.operator {
+            font-weight: 500;
+            font-size: 1.6rem;
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .key.operator:hover {
+            background-color: #bbdefb;
+        }
+        
+        .key.operator:active {
+            background-color: #90caf9;
+        }
+        
+        /* Special colorful buttons */
+        .key.clear {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .key.clear:hover {
+            background-color: #ffcdd2;
+        }
+        
+        .key.clear:active {
+            background-color: #ef9a9a;
+        }
+        
+        .key.equals {
+            background: linear-gradient(135deg, #4a90e2, #2b6cb0);
+            color: white;
+            font-weight: 500;
+            font-size: 1.8rem;
+        }
+        
+        .key.equals:hover {
+            background: linear-gradient(135deg, #3a7bc8, #1e4e8c);
+        }
+        
+        .key.equals:active {
+            background: linear-gradient(135deg, #2b6cb0, #15375e);
+        }
+        
+        /* Number buttons with gradient effect */
+        .key.number {
+            background-color: #f8f9fa;
+            font-weight: 500;
+        }
+        
+        .key.number:hover {
+            background-color: #e9ecef;
+        }
+
+        .key.decimal:hover {
+            background-color: #e9ecef;
+        }
+        
+        .key.number:active {
+            background-color: #dee2e6;
+        }
+        
+        /* Special button for zero */
+        .key.zero {
+            grid-column: span 2;
+            background-color: #f8f9fa;
+        }
+        
+        .key.decimal {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        /* Colorful percentage and sign buttons */
+        .key.operator:nth-child(2) { /* ± */
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .key.operator:nth-child(2):hover {
+            background-color: #ffe0b2;
+        }
+        
+        .key.operator:nth-child(3) { /* % */
+            background-color: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .key.operator:nth-child(3):hover {
+            background-color: #e1bee7;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 400px) {
+            .calculator {
+                width: 300px;
+            }
+            
+            .key {
+                height: 70px;
+                font-size: 1.4rem;
+            }
+            
+            .theme-toggle {
+                top: 20px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 350px) {
+            .calculator {
+                width: 280px;
+            }
+            
+            .key {
+                height: 65px;
+            }
+        }
+        
+        /* Animation for calculator entry */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .calculator {
+            animation: slideIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <input type="checkbox" id="theme-toggle">
+    
+    <div class="theme-toggle">
+        <label for="theme-toggle" class="toggle-label">
+            <span class="icon">🌙</span>
+            <span class="text_theme">Dark Mode</span>
+            <span class="toggle-switch"></span>
+        </label>
+    </div>
+    
+    <div class="calculator">
+        <div class="display">
+            <input type="text" class="display-input" id="disp" placeholder="0" readonly>
+        </div>
+        
+        <div class="keypad">
+            <!-- First row -->
+            <button class="key clear">AC</button>
+            <button class="key operator">X</button>
+            <button class="key operator">%</button>
+            <button class="key operator">÷</button>
+            
+            <!-- Second row -->
+            <button class="key number">7</button>
+            <button class="key number">8</button>
+            <button class="key number">9</button>
+            <button class="key operator">×</button>
+            
+            <!-- Third row -->
+            <button class="key number">4</button>
+            <button class="key number">5</button>
+            <button class="key number">6</button>
+            <button class="key operator">-</button>
+            
+            <!-- Fourth row -->
+            <button class="key number">1</button>
+            <button class="key number">2</button>
+            <button class="key number">3</button>
+            <button class="key operator">+</button>
+            
+            <!-- Fifth row -->
+            <button class="key number zero">0</button>
+            <button class="key decimal">.</button>
+            <button class="key equals">=</button>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>
