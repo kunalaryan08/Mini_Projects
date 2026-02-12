@@ -46,7 +46,7 @@ function evaluate() {
     try {
         calc = eval(normalize(calc)).toString();
     } catch {
-        alert("Invalid Expression");
+        calc = `Error`;
     }
 }
 
