@@ -1,0 +1,363 @@
+/* ----- RESET & VARIABLES (light default) ----- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* fallback system fonts */
+body {
+    background: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+:root {
+    /* light theme – soft, minimal, glass */
+    --bg-gradient: linear-gradient(145deg, #f8fafc 0%, #eef2f6 100%);
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --accent-soft: #94a3b8;
+    --accent-medium: #64748b;
+    --shadow-sm: 0 8px 20px -6px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.02);
+    --shadow-hover: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+    --btn-bg: #ffffff;
+    --btn-text: #334155;
+    --score-bg: rgba(255, 255, 255, 0.6);
+    --placeholder-bg: #f1f5f9;
+    --toggle-sun: #fbbf24;
+    --toggle-moon: #1e293b;
+    --vs-color: #475569;
+}
+
+/* dark theme – still minimal, soft dark */
+#theme-toggle:checked ~ .app {
+    --bg-gradient: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+    --card-bg: rgba(30, 41, 59, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --accent-soft: #475569;
+    --accent-medium: #64748b;
+    --shadow-sm: 0 8px 20px -6px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 25px 35px -14px #00000080;
+    --btn-bg: #334155;
+    --btn-text: #e2e8f0;
+    --score-bg: rgba(15, 23, 42, 0.7);
+    --placeholder-bg: #1e293b;
+    --toggle-sun: #fcd34d;
+    --toggle-moon: #a5b4fc;
+    --vs-color: #94a3b8;
+}
+
+/* hidden checkbox */
+#theme-toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* main card – exactly 100vh, no scroll */
+.app {
+    max-width: 1100px;
+    width: 100%;
+    height: 95vh;   /* leaves tiny breathing room, but fits one screen */
+    max-height: 900px;
+    background: var(--bg-gradient);
+    backdrop-filter: blur(20px);
+    border-radius: 3rem;
+    box-shadow: var(--shadow-sm), inset 0 1px 3px rgba(255,255,255,0.5);
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--glass-border);
+    transition: background 0.3s, border 0.2s, box-shadow 0.2s;
+}
+
+/* ----- header (flex, no wrap) ----- */
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-bottom: 1.2rem;
+}
+
+.titles h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.titles .sub {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-top: 0.1rem;
+}
+
+/* ----- toggle minimal ----- */
+.theme-switch {
+    position: relative;
+    width: 80px;
+    height: 40px;
+    background: var(--card-bg);
+    backdrop-filter: blur(4px);
+    border-radius: 100px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.theme-switch .icon {
+    font-size: 1.3rem;
+    z-index: 2;
+}
+.theme-switch .sun { color: var(--toggle-sun); }
+.theme-switch .moon { color: var(--toggle-moon); }
+.theme-switch .toggle-thumb {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    top: 3px;
+    left: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+    border: 1px solid #e2e8f0;
+}
+#theme-toggle:checked ~ .app .theme-switch .toggle-thumb {
+    transform: translateX(40px);
+    background: #1e293b;
+    border-color: #64748b;
+}
+
+/* ----- battle arena (flex, symmetrical) ----- */
+.battle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 2rem;
+    margin: 1rem 0 1.2rem;
+    flex-wrap: nowrap;
+}
+
+.fighter-card {
+    flex: 1 1 0;
+    min-width: 160px;
+    background: var(--card-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 2.5rem;
+    padding: 1.8rem 1rem 2rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fighter-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.fighter-label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--placeholder-bg);
+    padding: 0.2rem 2rem;
+    border-radius: 40px;
+    border: 1px solid var(--glass-border);
+}
+
+.placeholder-move {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--placeholder-bg);
+    border: 2px solid var(--glass-border);
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.02);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    transition: 0.2s;
+}
+
+.vs-large {
+    font-size: 3.8rem;
+    font-weight: 700;
+    color: var(--vs-color);
+    background: var(--card-bg);
+    padding: 0.5rem 2rem;
+    border-radius: 100px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(4px);
+    box-shadow: var(--shadow-sm);
+    letter-spacing: 2px;
+}
+
+/* ----- move selectors (3 clean circles) ----- */
+.move-panel {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0.8rem 0 0.8rem;
+    flex-wrap: wrap;
+}
+
+.move-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: all 0.2s;
+    cursor: default;
+    gap: 0.2rem;
+}
+
+.move-circle span:first-child {
+    font-size: 2rem;
+    line-height: 1;
+}
+.move-circle span:last-child {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.move-circle:hover {
+    transform: scale(1.08);
+    box-shadow: var(--shadow-hover);
+    background: var(--btn-bg);
+    border-color: var(--accent-medium);
+}
+
+/* ----- scoreboard minimal row ----- */
+.score-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    background: var(--score-bg);
+    backdrop-filter: blur(4px);
+    border-radius: 60px;
+    padding: 0.8rem 2.5rem;
+    margin: 0.5rem auto 1.2rem;
+    width: fit-content;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.score-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+}
+.score-item strong {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-left: 0.2rem;
+}
+
+.score-divider {
+    color: var(--accent-soft);
+    font-size: 1.8rem;
+    font-weight: 200;
+}
+
+/* ----- action buttons (clean, modern) ----- */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.8rem;
+    margin: 1rem 0 0.2rem;
+    flex-wrap: wrap;
+}
+
+.primary-btn {
+    background: var(--btn-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--btn-text);
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(4px);
+    cursor: default;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    background: var(--card-bg);
+    border-color: var(--accent-medium);
+}
+
+/* tiny spacer to fill exactly */
+.spacer {
+    flex: 0 0 0.2rem;
+}
+
+.anker {
+    text-decoration: none;
+}
+/* ensure no overflow, everything fits in 100vh */
+@media (max-height: 700px) {
+    .app { padding: 1.2rem 2rem; }
+    .fighter-card { padding: 1rem 0.8rem; }
+    .placeholder-move { width: 90px; height: 90px; font-size: 2.5rem; }
+    .move-circle { width: 90px; height: 90px; }
+    .vs-large { font-size: 2.8rem; }
+}
+
+/* responsive for small width */
+@media (max-width: 600px) {
+    .app { padding: 1.2rem; }
+    .battle { gap: 0.5rem; }
+    .vs-large { font-size: 2.5rem; padding: 0.2rem 1rem; }
+    .fighter-label { font-size: 1.2rem; }
+}
+
+/* no scroll guarantee */
+body {
+    overflow: hidden;
+}
+.app {
+    overflow-y: auto;  /* only if content overflows (but we designed to fit) */
+    scrollbar-width: none; /* hide scrollbar to keep clean */
+}
+.app::-webkit-scrollbar {
+    display: none;
+}

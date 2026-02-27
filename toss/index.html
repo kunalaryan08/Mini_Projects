@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors · clean UI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <input type="checkbox" id="theme-toggle">
+
+    <div class="app">
+
+        <!-- header with toggle -->
+        <div class="header-row">
+            <div class="titles">
+                <h1>Rock Paper Scissors</h1>
+                <div class="sub">You vs Computer</div>
+            </div>
+            <label for="theme-toggle" class="theme-switch">
+                <span class="icon sun">☀️</span>
+                <span class="icon moon">🌙</span>
+                <span class="toggle-thumb"></span>
+            </label>
+        </div>
+
+        <!-- battle arena -->
+        <div class="battle">
+            <!-- left: you -->
+            <div class="fighter-card">
+                <div class="fighter-label">You</div>
+                <div class="placeholder-move">?</div>
+                <div style="height: 0.5rem;"></div> <!-- spacing -->
+            </div>
+
+            <!-- VS -->
+            <div class="vs-large">VS</div>
+
+            <!-- right: computer -->
+            <div class="fighter-card">
+                <div class="fighter-label">Computer</div>
+                <div class="placeholder-move">?</div>
+                <div style="height: 0.5rem;"></div>
+            </div>
+        </div>
+
+        <!-- three move circles -->
+        <div class="move-panel">
+            <div class="move-circle">
+                <span>🪨</span>
+                <span>Rock</span>
+            </div>
+            <div class="move-circle">
+                <span>📄</span>
+                <span>Paper</span>
+            </div>
+            <div class="move-circle">
+                <span>✂️</span>
+                <span>Scissors</span>
+            </div>
+        </div>
+
+        <!-- scoreboard horizontal -->
+        <div style="display: flex; justify-content: center;">
+            <div class="score-row">
+                <div class="score-item">You <strong>0</strong></div>
+                <span class="score-divider">|</span>
+                <div class="score-item">Computer <strong>0</strong></div>
+            </div>
+        </div>
+
+        <!-- action buttons -->
+        <div class="actions">
+            <div class="primary-btn">Start New Game</div>
+            <a href="../tictactoe/index.html" class="anker"> <div class="primary-btn">Move Towards Tic Tac Toe</div> </a>
+        </div>
+
+        <!-- tiny invisible flex filler (keeps everything tight) -->
+        <div style="flex: 0 1 0;"></div>
+    </div>
+
+    <!-- absolutely no JS, pure CSS design -->
+</body>
+<script src="script.js"></script>
+</html>

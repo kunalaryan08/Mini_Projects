@@ -1,0 +1,432 @@
+/* ----- CSS variables – light & dark themes (smooth transition) ----- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.25s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--bg-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 1.5rem;
+}
+
+/* theme variables – light mode default */
+:root {
+    --bg-gradient: linear-gradient(145deg, #f3f5f9 0%, #eef0f5 100%);
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-glass: rgba(255, 255, 255, 0.45);
+    --text-primary: #1e1f28;
+    --text-secondary: #4a4c5a;
+    --border-subtle: rgba(0, 0, 0, 0.05);
+    --cell-bg: rgba(255, 255, 255, 0.6);
+    --cell-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255,255,255,0.7) inset;
+    --cell-hover: rgba(255, 255, 255, 0.95);
+    --cell-lift: translateY(-6px);
+    --score-bg: rgba(255, 255, 255, 0.7);
+    --btn-bg: rgba(255, 255, 255, 0.6);
+    --btn-border: 1px solid rgba(255,255,255,0.5);
+    --btn-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.15);
+    --btn-hover: rgba(255, 255, 255, 0.95);
+    --x-color: #2b2e4a;
+    --o-color: #8b5f65;
+    --board-glow: 0 20px 35px -12px rgba(0,0,0,0.2);
+    --toggle-sun: brightness(1) invert(0.2);
+    --toggle-moon: brightness(0) invert(0.5);
+}
+
+/* DARK MODE – activated by checkbox hack */
+#theme-toggle:checked ~ .app-container {
+    --bg-gradient: linear-gradient(145deg, #1a1c24 0%, #22242e 100%);
+    --card-bg: rgba(30, 32, 40, 0.8);
+    --card-glass: rgba(20, 22, 28, 0.7);
+    --text-primary: #ededf2;
+    --text-secondary: #a9abb8;
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --cell-bg: rgba(35, 38, 48, 0.7);
+    --cell-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.05) inset;
+    --cell-hover: rgba(50, 54, 68, 0.95);
+    --score-bg: rgba(25, 27, 35, 0.7);
+    --btn-bg: rgba(30, 33, 42, 0.7);
+    --btn-border: 1px solid rgba(255,255,255,0.03);
+    --btn-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+    --btn-hover: rgba(45, 49, 62, 0.95);
+    --x-color: #d3d9ff;
+    --o-color: #f2b0bb;
+    --board-glow: 0 25px 40px -15px rgba(0,0,0,0.7);
+    --toggle-sun: brightness(1.2) invert(0.9);
+    --toggle-moon: brightness(1.5) invert(0.2);
+}
+
+/* toggle switch – hidden checkbox */
+.theme-toggle-checkbox {
+    display: none;
+}
+
+/* main container – inherits theme variables */
+.app-container {
+    max-width: 680px;
+    width: 100%;
+    background: var(--card-glass);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 3.5rem;
+    padding: 2.2rem 2rem 2.5rem;
+    box-shadow: 0 30px 50px -20px rgba(0,0,0,0.3), 0 0 0 1px var(--border-subtle);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ----- TOP SECTION ----- */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.8rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.titles h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+.titles .subtitle {
+    font-size: 1.1rem;
+    font-weight: 450;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+    letter-spacing: 0.2px;
+}
+
+/* dark/light toggle – CSS hack, smooth */
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border-radius: 60px;
+    padding: 0.35rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03), 0 0 0 1px var(--border-subtle);
+    backdrop-filter: blur(4px);
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    padding: 0.35rem 0.9rem;
+    border-radius: 40px;
+    transition: 0.15s;
+    font-weight: 480;
+    color: var(--text-secondary);
+}
+
+.toggle-label::before {
+    content: "☀️";
+    font-size: 1.2rem;
+    filter: var(--toggle-sun);
+    opacity: 0.8;
+    transition: inherit;
+    margin-right: 4px;
+}
+
+.toggle-label:last-child::before {
+    content: "🌙";
+    filter: var(--toggle-moon);
+}
+
+/* when checkbox checked → swap which label is highlighted */
+#theme-toggle:not(:checked) ~ .app-container .toggle-wrapper .toggle-label:first-child {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    color: var(--text-primary);
+    font-weight: 520;
+}
+
+#theme-toggle:checked ~ .app-container .toggle-wrapper .toggle-label:last-child {
+    background: rgba(40, 44, 55, 0.7);
+    backdrop-filter: blur(2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    color: #ffffffd9;
+}
+
+/* hide native checkbox */
+#theme-toggle:checked ~ .app-container .toggle-label,
+#theme-toggle:not(:checked) ~ .app-container .toggle-label {
+    transition: all 0.18s;
+}
+
+/* ----- GAME BOARD (3x3) ----- */
+.board {
+    position: relative;
+    width: 360px;
+    height: 360px;
+    margin: 2rem auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    gap: 8px; /* works perfectly with this */
+}
+
+/* .cell {
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    cursor: pointer;
+} */
+
+/* WIN LINE */
+/* .win-line {
+    position: absolute;
+    height: 6px;
+    width: 100%;
+
+    background: greenyellow;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) scaleX(0);
+    transform-origin: center;
+
+    transition: transform 0.3s ease;
+
+    z-index: 10;
+} */
+
+  
+
+.cell {
+    background: var(--cell-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 28px;
+    box-shadow: var(--cell-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.2,0,0,1);
+    font-size: 4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: default;
+    border: 1px solid var(--border-subtle);
+}
+
+/* X and O styling */
+.cell.x-holder::after {
+    content: "×";
+    font-size: 5.2rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--x-color);
+    letter-spacing: -0.1rem;
+    transform: scale(1.1);
+    display: block;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.cell.o-holder::after {
+    content: "○";
+    font-size: 4.8rem;
+    font-weight: 300;
+    color: var(--o-color);
+    transform: scale(1.1);
+    text-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* hover effect – lift + subtle bg change */
+.cell:hover {
+    transform: var(--cell-lift);
+    background: var(--cell-hover);
+    box-shadow: 0 22px 38px -14px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.3) inset;
+}
+
+/* Pre‑populated symbols for UI demo – static dummy markers */
+/* .cell:nth-child(1) { composes: x-holder; } */
+/* .cell:nth-child(1)::after { content: "×"; font-size: 5.2rem; font-weight: 300; color: var(--x-color); }
+.cell:nth-child(2)::after { content: "○"; font-size: 4.8rem; font-weight: 300; color: var(--o-color); }
+.cell:nth-child(3)::after { content: "×"; font-size: 5.2rem; font-weight: 300; color: var(--x-color); }
+.cell:nth-child(4)::after { content: "○"; font-size: 4.8rem; font-weight: 300; color: var(--o-color); }
+.cell:nth-child(5)::after { content: "×"; font-size: 5.2rem; font-weight: 300; color: var(--x-color); }
+.cell:nth-child(6)::after { content: "○"; font-size: 4.8rem; font-weight: 300; color: var(--o-color); }
+.cell:nth-child(7)::after { content: "×"; font-size: 5.2rem; font-weight: 300; color: var(--x-color); }
+.cell:nth-child(8)::after { content: "○"; font-size: 4.8rem; font-weight: 300; color: var(--o-color); }
+.cell:nth-child(9)::after { content: "×"; font-size: 5.2rem; font-weight: 300; color: var(--x-color); } */
+
+/* ensure pseudo element styles */
+.cell::after {
+    display: block;
+    transition: inherit;
+}
+
+/* ----- SCOREBOARD (compact horizontal) ----- */
+.scoreboard {
+    background: var(--score-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1rem 2rem;
+    border-radius: 80px;
+    width: fit-content;
+    margin: 0 auto 2rem;
+    box-shadow: 0 12px 28px -12px rgba(0,0,0,0.2), 0 0 0 1px var(--border-subtle);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.score-content {
+    display: flex;
+    gap: 3rem;
+    font-size: 1.35rem;
+    font-weight: 540;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+}
+
+.score-x, .score-o {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.score-x span, .score-o span {
+    font-weight: 650;
+    color: var(--text-secondary);
+    min-width: 2rem;
+    text-align: center;
+}
+
+.score-x::before {
+    content: "×";
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--x-color);
+    margin-right: 4px;
+    transform: scale(1.1);
+}
+
+.score-o::before {
+    content: "○";
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--o-color);
+    margin-right: 4px;
+    transform: scale(1.1);
+}
+
+/* ----- ACTION BUTTONS (row) ----- */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: 1rem;
+}
+
+
+ .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .starter-wrapper {
+    display: flex;
+    gap: 12px;
+  }
+  
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+.btn {
+    background: var(--btn-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--btn-border);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 530;
+    color: var(--text-primary);
+    box-shadow: var(--btn-shadow);
+    cursor: default;
+    transition: all 0.2s ease;
+    letter-spacing: 0.01em;
+    border: 1px solid rgba(255,255,255,0.15);
+    flex: 0 1 auto;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    transform: translateY(-5px);
+    background: var(--btn-hover);
+    box-shadow: 0 18px 30px -14px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.2) inset;
+}
+
+.btn:active {
+    transform: translateY(-2px);
+    transition: 0.05s;
+}
+
+.anker {
+    text-decoration: none;
+}
+
+/* subtle gradient highlight on first button */
+.btn-primary {
+    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
+    border: 1px solid rgba(255,255,255,0.4);
+}
+
+#theme-toggle:checked ~ .app-container .btn-primary {
+    background: linear-gradient(135deg, rgba(60,64,80,0.8), rgba(40,44,58,0.9));
+}
+
+/* footer / tiny rps hint */
+.rock-paper-note {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    opacity: 0.75;
+    letter-spacing: 0.2px;
+}
+
+/* everything fits 100vh comfortably */
+@media (max-height: 700px) {
+    .app-container { padding: 1.2rem 1.5rem; }
+    .board { max-width: 380px; margin: 1rem auto; }
+    .cell { font-size: 3.5rem; }
+    .titles h1 { font-size: 2.2rem; }
+}
+
+/* responsive small widths */
+@media (max-width: 460px) {
+    .board { gap: 0.7rem; }
+    .cell::after { font-size: 3.5rem !important; }
+    .score-content { gap: 1.5rem; font-size: 1.2rem; }
+    .btn { padding: 0.7rem 1.3rem; font-size: 1rem; }
+}
+
+/* ensure no overflow */
+.cell::after, .cell {
+    user-select: none;
+}

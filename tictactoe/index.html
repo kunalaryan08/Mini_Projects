@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tier · tic tac toe (UI only)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- hidden checkbox triggers dark mode -->
+  <input type="checkbox" id="theme-toggle" class="theme-toggle-checkbox">
+
+  <!-- main app container (all variables apply here) -->
+  <div class="app-container">
+
+    <!-- top section: title + toggle -->
+    <div class="top-bar">
+      <div class="titles">
+        <h1>Tic Tac Toe</h1>
+        <div class="subtitle">Player X  vs  Player O</div>
+      </div>
+
+      <!-- dark/light toggle (CSS only) -->
+      <div class="toggle-wrapper">
+        <label for="theme-toggle" class="toggle-label">Light</label>
+        <label for="theme-toggle" class="toggle-label">Dark</label>
+      </div>
+    </div>
+
+    <!-- game board 3x3 (placeholders X / O for UI) -->
+    <div class="board">
+      <!-- <div class="win-line"></div> -->
+      <div class="cell 1">    </div>
+      <div class="cell 2">    </div>
+      <div class="cell 3">    </div>
+      <div class="cell 4">    </div>
+      <div class="cell 5">    </div>
+      <div class="cell 6">    </div>
+      <div class="cell 7">    </div>
+      <div class="cell 8">    </div>
+      <div class="cell 9">    </div>
+    </div>
+
+    <!-- scoreboard compact card -->
+    <!-- <div class="scoreboard">
+      <div class="score-content">
+        <div class="score-x"><span>0</span></div>
+        <div class="score-o"><span>0</span></div>
+      </div>
+    </div> -->
+
+    <!-- action buttons row -->
+    <div class="actions">
+
+      <!-- Starter Selection -->
+      <div class="starter-wrapper">
+        <div class="btn starter-btn">X Starts</div>
+        <div class="btn starter-btn">O Starts</div>
+      </div>
+    
+      <!-- Action Buttons (Now Below) -->
+      <div class="action-buttons">
+        <a href="../toss/index.html" class="anker">
+          <div class="btn btn-primary">Start New Game</div>
+        </a>
+    
+        <div class="btn">Move Towards Rock Paper Scissors</div>
+      </div>
+    
+    </div>    
+    
+
+    <!-- invisible elegant spacer (just for design) -->
+    <div class="rock-paper-note">✦ rock paper scissors · next dimension ✦</div>
+  </div>
+
+  <!-- no script, pure UI – everything fits 100vh, centered, smooth glass -->
+</body>
+<script src="script.js"></script>
+</html>
